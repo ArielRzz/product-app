@@ -4,6 +4,7 @@ import com.productApp.product.dto.ProductDto;
 import jakarta.persistence.EntityNotFoundException;
 import com.productApp.product.mapper.ProductMapper;
 import com.productApp.product.model.Product;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.productApp.product.repository.IProductRepository;
 import com.productApp.product.service.ProductService;
@@ -26,14 +27,22 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.convertToDtoList(products);
     }
 
- /*   @Override
-    public List<Product> getProductsOrderByPrice() {
-        return productRepository.getAllAndOrderByPrice();
+    @Override
+    public List<ProductDto> getProductsOrderByPrice() {
+        Sort sort = Sort.by("price").ascending();
+        List<Product> sorted =  productRepository.getAllAndOrderByPrice(sort);
+        return productMapper.convertToDtoList(sorted);
     }
-*/
+
     @Override
     public ProductDto getProductById(Long productId) {
         Product product = productRepository.getReferenceById(productId);
+        return productMapper.convertToDto(product);
+    }
+
+    @Override
+    public ProductDto getProductByName(String name) {
+        Product product = productRepository.getProductByName(name);
         return productMapper.convertToDto(product);
     }
     @Override
