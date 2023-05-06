@@ -26,7 +26,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/sorted")
+/*    @GetMapping("/products/sorted")
     public ResponseEntity<List<ProductDto>> getAllSortedProducts() {
         var products = productService.getProductsOrderByPrice();
         if (products.isEmpty()) {
@@ -34,14 +34,14 @@ public class ProductController {
         } else {
             return new ResponseEntity<>(products, HttpStatus.OK);
         }
-    }
+    }*/
 
     @GetMapping("/products/{productId}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
         return new ResponseEntity<>(productService.getProductById(productId), HttpStatus.OK);
     }
 
-    @GetMapping("/products/{productName}")
+    @GetMapping("/products/name/{productName}")
     public ResponseEntity<ProductDto> getProductByName(@PathVariable String productName) {
         return new ResponseEntity<>(productService.getProductByName(productName), HttpStatus.OK);
     }

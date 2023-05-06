@@ -16,7 +16,7 @@ public interface ProductService {
 
     void deleteProduct(Long productId);
 
-    List<ProductDto> getProductsOrderByPrice();
+/*    List<ProductDto> getProductsOrderByPrice();*/
 
     ProductDto getProductById(Long productId);
 }

@@ -27,12 +27,12 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.convertToDtoList(products);
     }
 
-    @Override
+/*    @Override
     public List<ProductDto> getProductsOrderByPrice() {
         Sort sort = Sort.by("price").ascending();
         List<Product> sorted =  productRepository.getAllAndOrderByPrice(sort);
         return productMapper.convertToDtoList(sorted);
-    }
+    }*/
 
     @Override
     public ProductDto getProductById(Long productId) {
