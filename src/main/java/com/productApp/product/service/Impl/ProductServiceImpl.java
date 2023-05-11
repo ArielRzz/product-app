@@ -1,10 +1,9 @@
 package com.productApp.product.service.Impl;
 
 import com.productApp.product.dto.ProductDto;
-import jakarta.persistence.EntityNotFoundException;
 import com.productApp.product.mapper.ProductMapper;
 import com.productApp.product.model.Product;
-import org.springframework.data.domain.Sort;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import com.productApp.product.repository.IProductRepository;
 import com.productApp.product.service.ProductService;
@@ -27,23 +26,24 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.convertToDtoList(products);
     }
 
-/*    @Override
+    @Override
     public List<ProductDto> getProductsOrderByPrice() {
-        Sort sort = Sort.by("price").ascending();
-        List<Product> sorted =  productRepository.getAllAndOrderByPrice(sort);
+        List<Product> sorted =  productRepository.findAllByOrderByPriceDesc();
         return productMapper.convertToDtoList(sorted);
-    }*/
+    }
 
     @Override
     public ProductDto getProductById(Long productId) {
-        Product product = productRepository.getReferenceById(productId);
+
+        Product product = productRepository.findById(productId).orElseThrow(()->new EntityNotFoundException(String.format(
+                "Product with id '%s' not found", productId
+        )));
         return productMapper.convertToDto(product);
     }
 
     @Override
-    public ProductDto getProductByName(String name) {
-        Product product = productRepository.getProductByName(name);
-        return productMapper.convertToDto(product);
+    public List<ProductDto> getListProductByName(String productName) {
+        return productMapper.convertToDtoList(productRepository.findAllByNameContainingIgnoreCase(productName));
     }
     @Override
     public ProductDto saveProduct(ProductDto product) {
@@ -83,6 +83,5 @@ public class ProductServiceImpl implements ProductService {
                         productId)));
         productRepository.delete(product);
     }
-
 
 }

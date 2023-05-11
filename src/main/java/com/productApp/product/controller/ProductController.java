@@ -1,5 +1,4 @@
 package com.productApp.product.controller;
-
 import com.productApp.product.dto.ProductDto;
 import com.productApp.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping
@@ -26,7 +24,7 @@ public class ProductController {
         }
     }
 
-/*    @GetMapping("/products/sorted")
+    @GetMapping("/products/sorted")
     public ResponseEntity<List<ProductDto>> getAllSortedProducts() {
         var products = productService.getProductsOrderByPrice();
         if (products.isEmpty()) {
@@ -34,7 +32,7 @@ public class ProductController {
         } else {
             return new ResponseEntity<>(products, HttpStatus.OK);
         }
-    }*/
+    }
 
     @GetMapping("/products/{productId}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
@@ -42,8 +40,13 @@ public class ProductController {
     }
 
     @GetMapping("/products/name/{productName}")
-    public ResponseEntity<ProductDto> getProductByName(@PathVariable String productName) {
-        return new ResponseEntity<>(productService.getProductByName(productName), HttpStatus.OK);
+    public ResponseEntity<List<ProductDto>> getProductByName(@PathVariable String productName) {
+        List<ProductDto> productListByName=  productService.getListProductByName(productName);
+        if (productListByName.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(productListByName, HttpStatus.OK);
+        }
     }
 
     @PostMapping("/products/create")
@@ -59,12 +62,7 @@ public class ProductController {
 
     @DeleteMapping("/products/{productId}/delete")
     public ResponseEntity<String> deleteProduct(@PathVariable Long productId) {
-        Optional<ProductDto> product = Optional.ofNullable(productService.getProductById(productId));
-        if (product.isPresent()) {
-            productService.deleteProduct(productId);
-            return new ResponseEntity<>("Product successfully deleted", HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
-        }
+          productService.deleteProduct(productId);
+          return new ResponseEntity<>("Product successfully deleted", HttpStatus.ACCEPTED);
     }
 }
